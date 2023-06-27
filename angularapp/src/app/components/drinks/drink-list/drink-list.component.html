@@ -1,0 +1,60 @@
+<!--Public View-->
+<div class="album py-5 bg-body-tertiary">
+  <div class="container">
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" *ngIf="drinks && drinks.length > 0">
+      <div class="col" *ngFor="let drink of drinks">
+        <div class="card shadow-sm" *ngIf="drink.isActive == true">
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#55595c" />
+            <text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+          </svg>
+          <div class="card-body">
+            <p class="card-text"><b>{{ drink.name }}</b> - {{ drink.description }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary m-1">Add to Order</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary m-1">Customize</button>
+              </div>
+              <small class="text-body-secondary">{{ drink.type }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="!drinks || drinks.length <= 0">No Drinks Found</p>
+  </div>
+</div>
+
+<!--Admin View-->
+<div class="container my-5">
+  <h1 class="mb-3">Drinks</h1>
+
+  <button type="button" class="btn btn-success mb-2" routerLink="/drinks/add">Add New Drink</button>
+
+  <table class="table table-hover" *ngIf="drinks && drinks.length > 0">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Available</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let drink of drinks">
+        <td>{{ drink.id }}</td>
+        <td>{{ drink.name }}</td>
+        <td>{{ drink.type }}</td>
+        <td>{{ drink.description }}</td>
+        <td>{{ drink.isActive ? "Yes" : "No" }}</td>
+        <td><a [routerLink]="['/drinks','edit',drink.id]">Edit</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="!drinks || drinks.length <= 0">No Drinks Found</p>
+</div>

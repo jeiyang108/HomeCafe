@@ -1,0 +1,26 @@
+<div class="py-4 bg-body-tertiary">
+  <div class="container my-3">
+    <h1 class="mb-3">Add a New Drink</h1>
+    <div class="row">
+      <div class="col-6">
+        <form #form="ngForm" (ngSubmit)="addDrink()">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="addDrinkRequest.name">
+          </div>
+          <div class="mb-3">
+            <label for="type" class="form-label">Type</label>
+            <input type="text" class="form-control" id="type" name="type" [(ngModel)]="addDrinkRequest.type">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" [(ngModel)]="addDrinkRequest.description">
+          </div>
+
+          <button type="submit" class="btn btn-primary mx-1">Save</button>
+          <button type="button" routerLink="/drinks" class="btn btn-secondary mx-1">Back</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
