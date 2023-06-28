@@ -16,6 +16,9 @@ builder.Services.AddDbContext<CafeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CafeAppConnectionString"));
 });
 
+//byte[] imageData = File.ReadAllBytes("Images/CoffeeImage.jpg");
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

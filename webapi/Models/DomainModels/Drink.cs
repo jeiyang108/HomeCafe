@@ -9,5 +9,7 @@
         public DateTime DateCreated { get; set; }
         public int PhotoId { get; set; }
         public Photo Photo { get; set; }
+        public IEnumerable<DrinkType> DrinkTypes { get; set; }
+        public IEnumerable<DrinkIngredient> DrinkIngredients { get; set; }
     }
 }

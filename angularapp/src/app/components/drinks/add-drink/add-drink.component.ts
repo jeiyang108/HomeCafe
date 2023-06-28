@@ -16,6 +16,7 @@ export class AddDrinkComponent implements OnInit {
     description: '',
     isActive: true,
     dateCreated: new Date(),
+    image: ''
   };
 
   ngOnInit(): void {

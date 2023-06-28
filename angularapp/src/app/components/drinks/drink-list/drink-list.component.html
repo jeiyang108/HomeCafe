@@ -5,11 +5,12 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" *ngIf="drinks && drinks.length > 0">
       <div class="col" *ngFor="let drink of drinks">
         <div class="card shadow-sm" *ngIf="drink.isActive == true">
-          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <!--<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
             <title>Placeholder</title>
             <rect width="100%" height="100%" fill="#55595c" />
             <text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-          </svg>
+          </svg>-->
+          <img [src]="drink.image" alt="Image">
           <div class="card-body">
             <p class="card-text"><b>{{ drink.name }}</b> - {{ drink.description }}</p>
             <div class="d-flex justify-content-between align-items-center">
@@ -17,7 +18,7 @@
                 <button type="button" class="btn btn-sm btn-outline-secondary m-1">Add to Order</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary m-1">Customize</button>
               </div>
-              <small class="text-body-secondary">{{ drink.type }}</small>
+              <small class="text-body-secondary"></small>
             </div>
           </div>
         </div>
@@ -39,7 +40,6 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Type</th>
         <th>Description</th>
         <th>Available</th>
         <th></th>
@@ -49,7 +49,6 @@
       <tr *ngFor="let drink of drinks">
         <td>{{ drink.id }}</td>
         <td>{{ drink.name }}</td>
-        <td>{{ drink.type }}</td>
         <td>{{ drink.description }}</td>
         <td>{{ drink.isActive ? "Yes" : "No" }}</td>
         <td><a [routerLink]="['/drinks','edit',drink.id]">Edit</a></td>

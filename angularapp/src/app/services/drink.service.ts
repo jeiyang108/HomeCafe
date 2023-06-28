@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
@@ -25,10 +25,16 @@ export class DrinkService {
   }
 
   updateDrink(id: string, updateDrinkRequest: Drink): Observable<Drink> {
-    return this.http.put<Drink>(this.baseApiUrl + '/api/drinks/' + id, updateDrinkRequest); 
+    return this.http.put<Drink>(this.baseApiUrl + '/api/drinks/' + id, updateDrinkRequest);
+  }
+
+  updateDrinkPhoto(id: string, formData: FormData): Observable<Drink> {
+    return this.http.put<Drink>(this.baseApiUrl + '/api/drinks/photo/' + id, formData);
   }
 
   deleteDrink(id: string): Observable<Drink> {
     return this.http.delete<Drink>(this.baseApiUrl + '/api/drinks/' + id);
   }
+
+
 }

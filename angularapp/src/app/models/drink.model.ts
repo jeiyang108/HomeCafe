@@ -1,3 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser";
+
 export interface Drink {
   id: number;
   name: string;
@@ -5,7 +7,6 @@ export interface Drink {
   dateCreated: Date;
   formattedDateCreated?: string | null;
   isActive: boolean;
+  image: string;
+  imageNew?: string;
 }
-
-//console.log("Hello World!")
-
