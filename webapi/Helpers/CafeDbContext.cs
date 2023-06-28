@@ -47,12 +47,13 @@ namespace webapi.Data
                 pump, tsp, shot, other, undefined, baseIng
             );
 
-            modelBuilder.Entity<Type>().HasData(
-                new Type { Id = 1, Name = "Coffee" },
-                new Type { Id = 2, Name = "Tea" },
-                new Type { Id = 3, Name = "Decaf" },
-                new Type { Id = 4, Name = "Hot" },
-                new Type { Id = 5, Name = "Cold" }
+            var coffee = new Type { Id = 1, Name = "Coffee" };
+            var tea = new Type { Id = 2, Name = "Tea" };
+            var decaf = new Type { Id = 3, Name = "Decaf" };
+            var hot = new Type { Id = 4, Name = "Hot" };
+            var cold = new Type { Id = 5, Name = "Cold" };
+			modelBuilder.Entity<Type>().HasData(
+                coffee, tea, decaf, hot, cold
             );
 
             modelBuilder.Entity<Status>().HasData(
@@ -63,10 +64,11 @@ namespace webapi.Data
             );
 
             byte[] imageData = File.ReadAllBytes("Images/CoffeeImage.jpg");
-            var samplePhoto = new Photo { Id = 1, Image = imageData };
-            modelBuilder.Entity<Photo>().HasData(
-                samplePhoto
-            );
+            var samplePhoto1 = new Photo { Id = 1, Image = imageData };
+			var samplePhoto2 = new Photo { Id = 2, Image = imageData };
+			modelBuilder.Entity<Photo>().HasData(
+                samplePhoto1, samplePhoto2
+			);
 
             var vanilla = new Ingredient { Id = 1, Name = "Sugar-free vanilla", UnitId = pump.Id };
             var hazelnut = new Ingredient { Id = 2, Name = "Sugar-free hazelnut", UnitId = pump.Id };
@@ -84,8 +86,8 @@ namespace webapi.Data
             );
 
 
-            var latte = new Drink { Id = 1, Name = "Latte", Description = "Cafe latte made with espresso and steamed milk", DateCreated = new DateTime(), IsActive = true, PhotoId = samplePhoto.Id };
-            var icedAmeriano = new Drink { Id = 2, Name = "Iced Americano", Description = "Iced americano made with espresso shots", DateCreated = new DateTime(), IsActive = true, PhotoId = samplePhoto.Id };
+            var latte = new Drink { Id = 1, Name = "Latte", Description = "Cafe latte made with espresso and steamed milk", DateCreated = new DateTime(), IsActive = true, PhotoId = samplePhoto1.Id };
+            var icedAmeriano = new Drink { Id = 2, Name = "Iced Americano", Description = "Iced americano made with espresso shots", DateCreated = new DateTime(), IsActive = true, PhotoId = samplePhoto2.Id };
             modelBuilder.Entity<Drink>().HasData(
                latte, icedAmeriano
             );
@@ -105,6 +107,14 @@ namespace webapi.Data
                 new User { Id = 1, Name = "Jei Yang", Password = encryptedPassword, DateCreated = new DateTime(), Email = "octoberjei@gmail.com", EmailConfirmed = true, IsAdmin = true },
                 new User { Id = 2, Name = "Jeremy Wildsmith", Password = encryptedPassword, DateCreated = new DateTime(), Email = "jeremyawildsmith@gmail.com", EmailConfirmed = true, IsAdmin = false }
             );
+
+            modelBuilder.Entity<DrinkType>().HasData(
+                new DrinkType { DrinkId = latte.Id, TypeId = coffee.Id },
+                new DrinkType { DrinkId = latte.Id, TypeId = hot.Id },
+				new DrinkType { DrinkId = icedAmeriano.Id, TypeId = coffee.Id },
+				new DrinkType { DrinkId = icedAmeriano.Id, TypeId = cold.Id }
+			);
+            
         }
     }
 }
