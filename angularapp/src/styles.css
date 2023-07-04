@@ -1,1 +1,81 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*main*/
+.navbar.bg-dark {
+  background-color:  rgb(90, 52, 23) !important;
+}
+
+.form-control-search {
+  background-color:  rgb(123, 99, 80);
+  color:  rgb(123, 99, 80);
+  border:  rgb(123, 99, 80);
+  --bs-body-bg: rgb(146, 154, 145, 0.30) !important;
+}
+.form-control-search:focus {
+  box-shadow: 0 0 0 0.1rem rgb(132 113 109 / 25%);
+}
+
+/*active switch */
+.active-switch {
+  height: 1.3rem;
+  width: 2.5rem;
+  margin-right: 0.3rem;
+}
+
+.form-check-input:focus {
+  border-color:rgb(52, 121, 44);
+  box-shadow: 0 0 0 0.25rem rgba(192, 222, 197, 0.25);
+}
+
+.active-switch:checked {
+  background-color:  rgb(52, 121, 44);
+  border-color:rgb(52, 121, 44);
+}
+
+.list-group-item.active {
+  background-color: rgb(123, 99, 80);
+  border-color:rgb(172, 147, 119);
+}
+
+/* buttons */
+.btn-outline-secondary {
+  --bs-btn-hover-bg:  rgb(146, 154, 145);
+  --bs-btn-hover-border-color:  rgb(146, 154, 145);
+}
+.btn-outline-success {
+  --bs-btn-hover-bg:  rgb(52, 121, 44);
+  --bs-btn-hover-border-color:  rgb(52, 121, 44);
+}
+.btn-primary {
+  background-color:  rgb(72, 128, 66);
+  border-color:rgb(72, 128, 66);
+}
+.btn-primary:hover {
+  background-color:  rgb(40, 84, 35);
+  border-color:rgb(40, 84, 35);
+}
+
+
+.btn-success {
+  background-color: rgb(123, 99, 80);
+  border-color:rgb(172, 147, 119);
+}
+.btn-success:hover {
+  background-color: rgb(90, 52, 23);
+  border-color: rgb(90, 52, 23);
+}
+
+
+.btn-secondary {
+  background-color:  rgb(146, 154, 145);
+  border-color:rgb(146, 154, 145);
+}
+
+.btn-danger {
+  background-color:  rgb(211, 57, 93);
+  border-color:rgb(211, 57, 93);
+}
+
+a {
+  color:rgb(72, 128, 66);
+}

@@ -362,6 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Angular Cache and VS Code
-angaulrapp/.angular/cache/
-.vscode/
+# Angular App
+angularapp/.angular
+angularapp/.vscode
+

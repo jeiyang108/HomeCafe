@@ -1,9 +1,14 @@
-﻿namespace webapi.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace webapi.Models.DTOs
 {
 	public class DrinkIngredientDTO
 	{
-		public DrinkDTO Drink { get; set; }
-		public IngredientDTO Ingredient { get; set; }
+		public int IngredientId { get; set; }
+		[Required]
+		public string IngredientName { get; set; }
 		public int Amount { get; set; }
+		public string UnitName { get; set; }
+
 	}
 }

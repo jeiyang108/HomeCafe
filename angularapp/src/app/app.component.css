@@ -1,0 +1,21 @@
+.active-switch {
+  height: 1.3rem;
+  width: 2.5rem;
+  margin-right: 0.3rem;
+}
+
+.form-check-input:focus {
+  border-color:rgb(52, 121, 44);
+  box-shadow: 0 0 0 0.25rem rgba(192, 222, 197, 0.25);
+}
+
+.active-switch:checked {
+  background-color:  rgb(52, 121, 44);
+  border-color:rgb(52, 121, 44);
+}
+
+.list-group-item.active {
+  background-color: rgb(113, 89, 70);
+  border-color:rgb(172, 147, 119);
+}
+
