@@ -16,15 +16,7 @@ namespace webapi.Models.DTOs
         public ICollection<DrinkIngredientDTO> DrinkIngredients { get; set;}
     }
 
-    public class AddDrinkRequest
-    {
-		[Required]
-		public string Name { get; set; }
-        public string Description { get; set; }
-		public ICollection<TypeDTO> Types { get; set; }
-		public ICollection<DrinkIngredientDTO> DrinkIngredients { get; set; }
-	}
-
+    // Drink DTO used for AddAdink or UpdateDrink API calls
     public class UpdateDrinkRequest
     {
 		[Required]

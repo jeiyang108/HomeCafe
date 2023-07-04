@@ -11,7 +11,6 @@ namespace webapi.Data
         }
 
         public DbSet<Drink> Drinks { get; set; }
-        
         public DbSet<OrderedDrinkIngredient> OrderedDrinkIngredients { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DrinkType> DrinkTypes { get; set; }
@@ -19,8 +18,11 @@ namespace webapi.Data
         public DbSet<Unit> Units { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<Type> Types { get; set; }
+		public DbSet<Status> Statuses { get; set; }
+		public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Define composite keys in the entity models
             modelBuilder.Entity<DrinkIngredient>()

@@ -373,7 +373,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status");
+                    b.ToTable("Statuses");
 
                     b.HasData(
                         new
@@ -412,7 +412,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Type");
+                    b.ToTable("Types");
 
                     b.HasData(
                         new
@@ -522,7 +522,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new

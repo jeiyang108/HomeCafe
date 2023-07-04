@@ -27,7 +27,7 @@ namespace webapi.Controllers
         // Create a new drink
         [HttpPost]
 		[DisableRequestSizeLimit]
-		public async Task<IActionResult> AddDrink([FromBody] AddDrinkRequest addDrinkRequest)
+		public async Task<IActionResult> AddDrink([FromBody] UpdateDrinkRequest addDrinkRequest)
         {
 			var file = Request.Form.Files[0];
 			if (file.Length > 0)
@@ -88,8 +88,8 @@ namespace webapi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllDrinks()
         {
-            // From dbSet to DTO
-            var drinks = await _dbContext.Drinks.Join(
+			// From dbSet to DTO
+			var drinks = await _dbContext.Drinks.Join(
                             _dbContext.Photos,
                             drink => drink.PhotoId,
                             photo => photo.Id,
@@ -100,14 +100,14 @@ namespace webapi.Controllers
                                 Description = drink.Description,
                                 IsActive = drink.IsActive,
                                 DateCreated = drink.DateCreated,
-                                Image = photo.Image
+                                Image = photo.Image,
 					        }
 			            ).ToListAsync();
 
-			//System.IO.File.WriteAllBytes("Images/Test.jpg", drinks.FirstOrDefault().Image);
-
 			return Ok(drinks);
         }
+
+
 
         // Get drink by id
         [HttpGet]
@@ -115,24 +115,53 @@ namespace webapi.Controllers
         public async Task<IActionResult> GetDrinkById([FromRoute] int id)
         {
             // Get domain object
-            var drink = await _dbContext.Drinks.Join(
-                            _dbContext.Photos,
-                            drink => drink.Id,
-                            photo => photo.Id,
-				            (drink, photo) => new DrinkDTO
-				            {
-					            Id = drink.Id,
-					            Name = drink.Name,
-					            Description = drink.Description,
-					            IsActive = drink.IsActive,
-					            DateCreated = drink.DateCreated,
-					            Image = photo.Image
-				            }
-			            ).FirstOrDefaultAsync(x => x.Id == id);
+			var types = await (from drink in _dbContext.Drinks
+						 join drinkType in _dbContext.DrinkTypes
+							on drink.Id equals drinkType.DrinkId
+						 join type in _dbContext.Types
+							on drinkType.TypeId equals type.Id
+						 where drink.Id == id
+						select (new TypeDTO
+						{
+							Id = type.Id,
+							Name = type.Name
+						})).ToListAsync();
 
-			if (drink != null)
+			var drinkIngredients = await (from drink in _dbContext.Drinks
+									join drinkIngredient in _dbContext.DrinkIngredients
+										on drink.Id equals drinkIngredient.DrinkId
+									join ingredient in _dbContext.Ingredients
+										on drinkIngredient.IngredientId equals ingredient.Id
+									join unit in _dbContext.Units
+										on ingredient.UnitId equals unit.Id
+									where drink.Id == id
+									select (new DrinkIngredientDTO
+									{
+										IngredientId = ingredient.Id,
+										IngredientName = ingredient.Name,
+										Amount = drinkIngredient.Amount,
+										UnitName = unit.Name
+									})).ToListAsync();
+
+			var drinkFound = await (from drink in _dbContext.Drinks
+							join photo in _dbContext.Photos
+								on drink.PhotoId equals photo.Id
+							where drink.Id == id
+							select new DrinkDTO
+							{
+								Id = drink.Id,
+								Name = drink.Name,
+								Description = drink.Description,
+								IsActive = drink.IsActive,
+								DateCreated = drink.DateCreated,
+								Image = photo.Image,
+								Types = types,
+								DrinkIngredients = drinkIngredients
+							}).FirstOrDefaultAsync();
+
+			if (drinkFound != null)
             {
-                return Ok(drink);
+                return Ok(drinkFound);
             }
             return BadRequest();
         }
@@ -190,18 +219,44 @@ namespace webapi.Controllers
 		public async Task<IActionResult> UpdateDrink([FromRoute] int id, [FromBody] UpdateDrinkRequest updateDrinkRequest)
 		{
 			// Get domain object
-			var drink = await _dbContext.Drinks.FindAsync(id);
+			var dbDrink = await _dbContext.Drinks.FindAsync(id);
 
-			if (drink != null)
+			if (dbDrink != null)
 			{
-				drink.Name = updateDrinkRequest.Name;
-				drink.Description = updateDrinkRequest.Description;
-				drink.IsActive = updateDrinkRequest.IsActive;
+				dbDrink.Name = updateDrinkRequest.Name;
+				dbDrink.Description = updateDrinkRequest.Description;
+				dbDrink.IsActive = updateDrinkRequest.IsActive;
 
-				_dbContext.Update(drink);
+				foreach (var i in dbDrink.DrinkIngredients)
+				{
+					// If the updateDrinkRequest doesn't have the ingredient DB has
+					if (!updateDrinkRequest.DrinkIngredients.Any(x => x.IngredientId == i.IngredientId))
+					{
+						// The ingredient needs to be removed from DB
+						_dbContext.DrinkIngredients.Remove(i);
+					}
+				}
+				foreach(var i in updateDrinkRequest.DrinkIngredients)
+				{
+					// If DB doesn't have the ingredient updateDrinkRequest has
+					if (!dbDrink.DrinkIngredients.Any(x => x.IngredientId == i.IngredientId))
+					{
+						// The ingredient needs to be added to DB
+						var newIngredient = new DrinkIngredient
+						{
+							DrinkId = id,
+							Drink = dbDrink,
+							IngredientId = i.IngredientId,
+							Amount = i.Amount
+						};
+						await _dbContext.DrinkIngredients.AddAsync(newIngredient);
+					}
+				}
+				
+				_dbContext.Update(dbDrink);
 				await _dbContext.SaveChangesAsync();
 
-				return Ok(drink);
+				return Ok(dbDrink);
 			}
 			return NotFound();
 		}
