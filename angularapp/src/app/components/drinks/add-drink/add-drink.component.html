@@ -21,7 +21,7 @@
       <div class="col-sm-6">
         <div class="mb-3">
           <label for="type" class="h6 form-label">Add Image</label>
-          <img [src]="addDrinkRequest.image" *ngIf="addDrinkRequest.image" alt="Image" class="form-label row mx-auto"/>
+          <img id="imgDisplay" [src]="addDrinkRequest.image" *ngIf="addDrinkRequest.image.length > 0" alt="Image" class="form-label row mx-auto img-fluid rounded"/>
           <br>
           <div class="input-group">
             <input type="file" accept="image/jpeg, image/png, image/gif" class="form-control" id="imageFile" aria-label="Upload" (change)="onChangeFile($event)">

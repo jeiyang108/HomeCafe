@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
 using webapi.Data;
 using webapi.Helpers;
 using webapi.Models.DTOs;
@@ -37,6 +38,20 @@ namespace webapi.Controllers
 				return Ok(ingredients);
 			}
 			return NotFound();
+		}
+
+		[HttpPut]
+		[Route("{id:int}")]
+		public async Task<IActionResult> UpdateIngredientStatus(int id, string action)
+		{
+			var ingredient = await _dbContext.Ingredients.FindAsync(id);
+			if (ingredient == null)
+			{
+				return NotFound();
+			}
+			var statusId = Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().FirstOrDefault(x => x.ToString() == action);
+			ingredient.Status = statusId;
+			return Ok(ingredient);
 		}
 	}
 }

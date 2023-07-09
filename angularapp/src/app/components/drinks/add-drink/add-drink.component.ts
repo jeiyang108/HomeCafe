@@ -79,7 +79,20 @@ export class AddDrinkComponent implements OnInit {
     // When image file is selected, load the file so it can be ready for confirmImageUpdate()
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
+      this.blobToBase64(this.file).then(res => {
+          this.addDrinkRequest.image = res as string;
+        });
+
     }
+  }
+
+
+  blobToBase64(blob: any) {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 
   hasType(object: Type) {

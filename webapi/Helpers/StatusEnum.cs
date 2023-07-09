@@ -1,4 +1,7 @@
-﻿namespace webapi.Helpers
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace webapi.Helpers
 {
 	public enum StatusEnum
 	{

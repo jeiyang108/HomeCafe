@@ -76,7 +76,7 @@ namespace webapi.Controllers
 						PhotoId = photo.Id
 					};
 
-					await _dbContext.Drinks.AddAsync(drink);
+					await _dbContext.Drinks.AddAsync(drink); // Drink object is being tracked by the context 
 					await _dbContext.SaveChangesAsync();
 
 					var drinkTypes = new List<DrinkType>();
@@ -104,7 +104,7 @@ namespace webapi.Controllers
 
 					await _dbContext.SaveChangesAsync();
 
-					return Ok(drink);
+					return Ok();
 				}
 				catch (Exception ex)
 				{
