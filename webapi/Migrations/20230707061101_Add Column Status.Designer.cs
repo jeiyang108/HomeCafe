@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(CafeDbContext))]
-    partial class CafeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707061101_Add Column Status")]
+    partial class AddColumnStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,77 +198,77 @@ namespace webapi.Migrations
                         {
                             Id = 1,
                             Name = "Sugar-free vanilla",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 1
                         },
                         new
                         {
                             Id = 2,
                             Name = "Sugar-free hazelnut",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 1
                         },
                         new
                         {
                             Id = 3,
                             Name = "Chocolate (Cocoa powder)",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 2
                         },
                         new
                         {
                             Id = 4,
                             Name = "Sugar (white)",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 2
                         },
                         new
                         {
                             Id = 5,
                             Name = "Cinnamon powder",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 2
                         },
                         new
                         {
                             Id = 6,
                             Name = "2% milk",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 6
                         },
                         new
                         {
                             Id = 7,
                             Name = "3% milk",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 6
                         },
                         new
                         {
                             Id = 8,
                             Name = "Ice",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 4
                         },
                         new
                         {
                             Id = 9,
                             Name = "Espresso shot",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 3
                         },
                         new
                         {
                             Id = 10,
                             Name = "Hot water",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 6
                         },
                         new
                         {
                             Id = 11,
                             Name = "Water",
-                            Status = 5,
+                            Status = 0,
                             UnitId = 6
                         });
                 });
@@ -414,21 +417,6 @@ namespace webapi.Migrations
                         {
                             Id = 4,
                             Name = "Cancelled"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Active"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Inactive"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Deleted"
                         });
                 });
 

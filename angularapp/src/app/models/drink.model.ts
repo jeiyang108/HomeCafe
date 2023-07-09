@@ -9,7 +9,6 @@ export interface Drink {
   formattedDateCreated?: string;
   isActive: boolean;
   image: string;
-  imageNew?: string;
   types?: Array<Type>;
   drinkIngredients?: Array<DrinkIngredient>;
 }

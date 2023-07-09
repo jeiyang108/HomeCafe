@@ -16,8 +16,8 @@ export class DrinkService {
     return this.http.get<Drink[]>(this.baseApiUrl + '/api/drinks');
   }
 
-  addDrink(addDrinkRequest: Drink): Observable<Drink> {
-    return this.http.post<Drink>(this.baseApiUrl + '/api/drinks', addDrinkRequest);
+  addDrink(formData: FormData): Observable<Drink> {
+    return this.http.post<Drink>(this.baseApiUrl + '/api/drinks', formData);
   }
 
   getDrink(id: string): Observable<Drink> {
