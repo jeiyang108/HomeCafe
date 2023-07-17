@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.Net.Http.Headers;
 using webapi.Data;
+using webapi.Helpers;
 using webapi.Models.DomainModels;
 using webapi.Models.DTOs;
 using static System.Net.Mime.MediaTypeNames;
@@ -174,10 +176,10 @@ namespace webapi.Controllers
 									select (new DrinkIngredientDTO
 									{
 										IngredientId = ingredient.Id,
-										IngredientName = ingredient.Name,
+										Name = ingredient.Name,
 										Amount = drinkIngredient.Amount,
-										UnitName = unit.Name,
-										IngredientStatus = ingredient.Status.ToString()
+										Unit = new UnitDTO { Id = unit.Id, Name = unit.Name },
+										Status = ((StatusEnum)ingredient.StatusId).ToString()
 									})).ToListAsync();
 
 			var drinkFound = await (from drink in _dbContext.Drinks

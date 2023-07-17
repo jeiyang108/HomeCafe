@@ -6,8 +6,9 @@ namespace webapi.Models.DomainModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public StatusEnum Status { get; set; }
-        public Unit Unit { get; set; }
+        public Status Status { get; set; }
+		public int StatusId { get; set; }
+		public Unit Unit { get; set; }
 
         public int UnitId { get; set; }
     }

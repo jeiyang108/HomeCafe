@@ -12,8 +12,8 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(CafeDbContext))]
-    [Migration("20230707061101_Add Column Status")]
-    partial class AddColumnStatus
+    [Migration("20230711083955_Update status column")]
+    partial class Updatestatuscolumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,6 @@ namespace webapi.Migrations
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
-
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -177,13 +176,15 @@ namespace webapi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("UnitId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("UnitId");
 
@@ -194,77 +195,77 @@ namespace webapi.Migrations
                         {
                             Id = 1,
                             Name = "Sugar-free vanilla",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 1
                         },
                         new
                         {
                             Id = 2,
                             Name = "Sugar-free hazelnut",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 1
                         },
                         new
                         {
                             Id = 3,
                             Name = "Chocolate (Cocoa powder)",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 2
                         },
                         new
                         {
                             Id = 4,
                             Name = "Sugar (white)",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 2
                         },
                         new
                         {
                             Id = 5,
                             Name = "Cinnamon powder",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 2
                         },
                         new
                         {
                             Id = 6,
                             Name = "2% milk",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 6
                         },
                         new
                         {
                             Id = 7,
                             Name = "3% milk",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 6
                         },
                         new
                         {
                             Id = 8,
                             Name = "Ice",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 4
                         },
                         new
                         {
                             Id = 9,
                             Name = "Espresso shot",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 3
                         },
                         new
                         {
                             Id = 10,
                             Name = "Hot water",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 6
                         },
                         new
                         {
                             Id = 11,
                             Name = "Water",
-                            Status = 0,
+                            StatusId = 5,
                             UnitId = 6
                         });
                 });
@@ -413,6 +414,21 @@ namespace webapi.Migrations
                         {
                             Id = 4,
                             Name = "Cancelled"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Active"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Inactive"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Deleted"
                         });
                 });
 
@@ -616,11 +632,19 @@ namespace webapi.Migrations
 
             modelBuilder.Entity("webapi.Models.DomainModels.Ingredient", b =>
                 {
+                    b.HasOne("webapi.Models.DomainModels.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("webapi.Models.DomainModels.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Status");
 
                     b.Navigation("Unit");
                 });

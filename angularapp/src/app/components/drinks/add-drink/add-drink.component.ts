@@ -13,10 +13,7 @@ import { IngredientService } from 'src/app/services/ingredient.service';
   styleUrls: ['./add-drink.component.css']
 })
 export class AddDrinkComponent implements OnInit {
-  selectedIngredient: DrinkIngredient = {
-    ingredientId: 0,
-    ingredientName: ''
-  };
+  selectedIngredient!: DrinkIngredient;
   addDrinkRequest: Drink = {
     id: 0,
     name: '',
@@ -48,6 +45,7 @@ export class AddDrinkComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.ingredientList = response;
+          //this.ingredientList.forEach(i => i.unitName = this.ingredientService.getUnitViewValue(i.unit ?? Unit.Undefined));
         }
     });
   }
@@ -112,21 +110,22 @@ export class AddDrinkComponent implements OnInit {
 
   // Add the selected ingredient to the ingredient list at the bottom
   addSelectedIngredient(ingredient: DrinkIngredient) {
-    let ingredientRef = this.ingredientList.find(i => i.ingredientName == ingredient.ingredientName);
+    let ingredientRef = this.ingredientList.find(i => i.name == ingredient.name);
     if (ingredientRef != undefined)
     {
       this.addDrinkRequest.drinkIngredients?.push(ingredientRef);
-      this.selectedIngredient.ingredientName = '';
+      this.selectedIngredient.name = '';
     }
   }
 
   // Remove the ingredient from the list
   removeIngredient(ingredient: DrinkIngredient) {
-    this.addDrinkRequest.drinkIngredients = this.addDrinkRequest.drinkIngredients?.filter(i => i.ingredientName !== ingredient.ingredientName);
+    this.addDrinkRequest.drinkIngredients = this.addDrinkRequest.drinkIngredients?.filter(i => i.name !== ingredient.name);
   }
 
   // Set the amount to given value when the input field is updated
   setAmount(ingredient: DrinkIngredient, event: any) {
     ingredient.amount = parseInt(event.target.value);
   }
+
 }

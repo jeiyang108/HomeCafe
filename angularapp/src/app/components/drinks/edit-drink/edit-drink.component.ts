@@ -9,7 +9,6 @@ import { Type } from '../../../models/type.model';
 import { DatePipe } from '@angular/common';
 import { DrinkIngredient } from '../../../models/drink-ingredient.model';
 
-
 @Component({
   selector: 'app-edit-drink',
   templateUrl: './edit-drink.component.html',
@@ -17,10 +16,7 @@ import { DrinkIngredient } from '../../../models/drink-ingredient.model';
   providers: [DatePipe]
 })
 export class EditDrinkComponent implements OnInit {
-  selectedIngredient: DrinkIngredient = {
-    ingredientId: 0,
-    ingredientName: ''
-  };
+  selectedIngredient!: DrinkIngredient;
   updateDrinkRequest: Drink = {
     id: 0,
     name: '',
@@ -53,7 +49,9 @@ export class EditDrinkComponent implements OnInit {
             .subscribe({
               next: (response) => {
                 this.updateDrinkRequest = response;
+                // Date format
                 this.updateDrinkRequest.formattedDateCreated = this.datePipe.transform(response.dateCreated, 'MMMM d, y h:mm a') ?? 'Undefined';
+                // Image format
                 this.updateDrinkRequest.image = 'data:image/png;base64,' + response.image;
               }
           });
@@ -70,6 +68,7 @@ export class EditDrinkComponent implements OnInit {
             .subscribe({
               next: (response) => {
                 this.ingredientList = response;
+                //this.ingredientList.forEach(i => i.unitName = this.ingredientService.getUnitViewValue(i.unit ?? Unit.Undefined));
               }
           });
         }
@@ -143,17 +142,17 @@ export class EditDrinkComponent implements OnInit {
 
   // Add the selected ingredient to the ingredient list at the bottom
   addSelectedIngredient(ingredient: DrinkIngredient) {
-    let ingredientRef = this.ingredientList.find(i => i.ingredientName == ingredient.ingredientName);
+    let ingredientRef = this.ingredientList.find(i => i.name == ingredient.name);
     if (ingredientRef != undefined)
     {
       this.updateDrinkRequest.drinkIngredients?.push(ingredientRef);
-      this.selectedIngredient.ingredientName = '';
+      this.selectedIngredient.name = '';
     }
   }
 
   // Remove the ingredient from the list
   removeIngredient(ingredient: DrinkIngredient) {
-    this.updateDrinkRequest.drinkIngredients = this.updateDrinkRequest.drinkIngredients?.filter(i => i.ingredientName !== ingredient.ingredientName);
+    this.updateDrinkRequest.drinkIngredients = this.updateDrinkRequest.drinkIngredients?.filter(i => i.name !== ingredient.name);
   }
 
   // Set the amount to given value when the input field is updated

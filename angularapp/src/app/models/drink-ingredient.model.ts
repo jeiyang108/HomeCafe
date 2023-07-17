@@ -1,7 +1,10 @@
+import { Unit } from "./unit.model";
+
 export interface DrinkIngredient {
   ingredientId: number;
-  ingredientName: string;
-  ingredientStatus?: string;
+  name: string;
+  status?: string;
+  isActive?: boolean;
   amount?: number;
-  unitName?: string;
+  unit: Unit;
 }

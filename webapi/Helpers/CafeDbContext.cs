@@ -75,17 +75,17 @@ namespace webapi.Data
                 samplePhoto1, samplePhoto2
 			);
 
-            var vanilla = new Ingredient { Id = 1, Name = "Sugar-free vanilla", UnitId = pump.Id, Status = Helpers.StatusEnum.Active };
-            var hazelnut = new Ingredient { Id = 2, Name = "Sugar-free hazelnut", UnitId = pump.Id, Status = Helpers.StatusEnum.Active };
-            var cocoa = new Ingredient { Id = 3, Name = "Chocolate (Cocoa powder)", UnitId = tsp.Id, Status = Helpers.StatusEnum.Active };
-            var sugar = new Ingredient { Id = 4, Name = "Sugar (white)", UnitId = tsp.Id, Status = Helpers.StatusEnum.Active };
-            var cinnamon = new Ingredient { Id = 5, Name = "Cinnamon powder", UnitId = tsp.Id, Status = Helpers.StatusEnum.Active };
-            var milk2 = new Ingredient { Id = 6, Name = "2% milk", UnitId = baseIng.Id, Status = Helpers.StatusEnum.Active };
-            var milk3 = new Ingredient { Id = 7, Name = "3% milk", UnitId = baseIng.Id, Status = Helpers.StatusEnum.Active };
-            var ice = new Ingredient { Id = 8, Name = "Ice", UnitId = other.Id, Status = Helpers.StatusEnum.Active };
-            var espresso = new Ingredient { Id = 9, Name = "Espresso shot", UnitId = shot.Id, Status = Helpers.StatusEnum.Active };
-            var hotWater = new Ingredient { Id = 10, Name = "Hot water", UnitId = baseIng.Id, Status = Helpers.StatusEnum.Active };
-            var water = new Ingredient { Id = 11, Name = "Water", UnitId = baseIng.Id, Status = Helpers.StatusEnum.Active };
+            var vanilla = new Ingredient { Id = 1, Name = "Sugar-free vanilla", UnitId = pump.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var hazelnut = new Ingredient { Id = 2, Name = "Sugar-free hazelnut", UnitId = pump.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var cocoa = new Ingredient { Id = 3, Name = "Chocolate (Cocoa powder)", UnitId = tsp.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var sugar = new Ingredient { Id = 4, Name = "Sugar (white)", UnitId = tsp.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var cinnamon = new Ingredient { Id = 5, Name = "Cinnamon powder", UnitId = tsp.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var milk2 = new Ingredient { Id = 6, Name = "2% milk", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var milk3 = new Ingredient { Id = 7, Name = "3% milk", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var ice = new Ingredient { Id = 8, Name = "Ice", UnitId = other.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var espresso = new Ingredient { Id = 9, Name = "Espresso shot", UnitId = shot.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var hotWater = new Ingredient { Id = 10, Name = "Hot water", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var water = new Ingredient { Id = 11, Name = "Water", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
             modelBuilder.Entity<Ingredient>().HasData(
                vanilla, hazelnut, cocoa, sugar, cinnamon, milk2, milk3, ice, espresso, hotWater, water
             );

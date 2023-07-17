@@ -7,10 +7,10 @@ namespace webapi.Models.DTOs
 	{
 		public int IngredientId { get; set; }
 		[Required]
-		public string IngredientName { get; set; }
-		public string? IngredientStatus { get; set; } // 1: ACTIVE 2:INACTIVE 3:DELETED 
+		public string Name { get; set; }
+		public string? Status { get; set; } // 1: ACTIVE 2:INACTIVE 3:DELETED 
 		public int? Amount { get; set; }
-		public string? UnitName { get; set; }
+		public UnitDTO? Unit { get; set; }
 
 	}
 }

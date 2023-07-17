@@ -2,14 +2,9 @@
 <div class="album py-5 bg-body-tertiary">
   <div class="container">
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" *ngIf="drinks && drinks.length > 0">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-4 g-3" *ngIf="drinks && drinks.length > 0">
       <div class="col" *ngFor="let drink of drinks">
-        <div class="card shadow-sm" *ngIf="drink.isActive == true">
-          <!--<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <title>Placeholder</title>
-            <rect width="100%" height="100%" fill="#55595c" />
-            <text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-          </svg>-->
+        <div class="card shadow-sm">
           <img [src]="drink.image" alt="Image">
           <div class="card-body">
             <p class="card-text"><b>{{ drink.name }}</b> - {{ drink.description }}</p>
@@ -46,7 +41,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let drink of drinks">
+      <tr *ngFor="let drink of dataSource.filteredData">
         <td>{{ drink.id }}</td>
         <td>{{ drink.name }}</td>
         <td>{{ drink.description }}</td>
@@ -55,5 +50,7 @@
       </tr>
     </tbody>
   </table>
+  <mat-paginator #paginator (page)="onPageChanged($event)" [length]="drinks.length" [pageIndex]="0" [pageSize]="pageSize" [pageSizeOptions]="[5,10,15]">
+  </mat-paginator>
   <p *ngIf="!drinks || drinks.length <= 0">No Drinks Found</p>
 </div>

@@ -44,9 +44,9 @@
           <label for="ingredients" class="h6 form-label">Drink Ingredients</label>
           <div class="input-group">
 
-            <input class="form-control" list="ingredientDataList" id="ingredientListInput" [(ngModel)]="selectedIngredient.ingredientName" name="ingredientName" placeholder="Type to search...">
+            <input class="form-control" list="ingredientDataList" id="ingredientListInput" [(ngModel)]="selectedIngredient.name" name="ingredientName" placeholder="Type to search...">
             <datalist id="ingredientDataList" name="selectedIngredient">
-              <option *ngFor="let item of ingredientList" [ngValue]="item.ingredientName" class="datalist-options">{{item.ingredientName}}</option>
+              <option *ngFor="let item of ingredientList" [ngValue]="item.name" class="datalist-options">{{item.name}}</option>
             </datalist>
             <button class="btn btn-outline-secondary" type="button" (click)="addSelectedIngredient(selectedIngredient)">Add</button>
           </div>
@@ -57,9 +57,9 @@
             </thead>
             <tbody>
             <tr *ngFor="let ingredient of addDrinkRequest.drinkIngredients" >
-              <td>{{ingredient.ingredientName}}</td>
+              <td>{{ingredient.name}}</td>
               <td><input type="text" [value]="ingredient.amount" (input)="setAmount(ingredient, $event)" class="form-control px-1"></td>
-              <td>{{ingredient.unitName}}</td>
+              <td>{{ingredient.unit }}</td>
               <td><span class="btn btn-danger btn-sm" type="button" (click)="removeIngredient(ingredient)">Remove</span></td>
             </tr>
            </tbody>
