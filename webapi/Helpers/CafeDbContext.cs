@@ -12,7 +12,8 @@ namespace webapi.Data
 
         public DbSet<Drink> Drinks { get; set; }
         public DbSet<OrderedDrinkIngredient> OrderedDrinkIngredients { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set; }
+		public DbSet<OrderedDrink> OrderedDrinks { get; set; }
+		public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DrinkType> DrinkTypes { get; set; }
         public DbSet<DrinkIngredient> DrinkIngredients { get; set; }
         public DbSet<Unit> Units { get; set; }

@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace webapi.Helpers
 {
-	public enum UnitEnum
+	public enum UnitEnum 
 	{
 		[Display(Name = "pump(s)")]
 		Pump = 1,
@@ -18,4 +19,5 @@ namespace webapi.Helpers
 		[Display(Name = "Base")]
 		Base = 6
 	}
+
 }

@@ -13,6 +13,6 @@ export class TypeService {
   constructor(private http: HttpClient) { }
 
   getTypes(): Observable<Type[]> {
-    return this.http.get<Type[]>(this.baseApiUrl + '/api/types');
+    return this.http.get<Type[]>(this.baseApiUrl + '/api/type');
   }
 }

@@ -9,9 +9,13 @@
           <div class="card-body">
             <p class="card-text"><b>{{ drink.name }}</b> - {{ drink.description }}</p>
             <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-outline-secondary m-1">Add to Order</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary m-1">Customize</button>
+              <div class="btn-group w-100">
+                <button type="button" class="col-6 btn btn-sm btn-outline-secondary">
+                  <mat-icon aria-hidden="false" fontIcon="add_shopping_cart" class="align-middle cart-icon"></mat-icon>
+                </button>
+                <button type="button" class="col-6 btn btn-sm btn-outline-secondary">
+                  <mat-icon aria-hidden="false" fontIcon="face" class="align-middle customize-icon"></mat-icon>
+                </button>
               </div>
               <small class="text-body-secondary"></small>
             </div>

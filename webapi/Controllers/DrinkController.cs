@@ -17,12 +17,12 @@ namespace webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DrinksController : ControllerBase
+    public class DrinkController : ControllerBase
     {
 
         private readonly CafeDbContext _dbContext;
 
-        public DrinksController(CafeDbContext dbContext)
+        public DrinkController(CafeDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -179,7 +179,7 @@ namespace webapi.Controllers
 										Name = ingredient.Name,
 										Amount = drinkIngredient.Amount,
 										Unit = new UnitDTO { Id = unit.Id, Name = unit.Name },
-										Status = ((StatusEnum)ingredient.StatusId).ToString()
+										Status = ((StatusEnum)ingredient.StatusId).GetDisplayName()
 									})).ToListAsync();
 
 			var drinkFound = await (from drink in _dbContext.Drinks
@@ -266,7 +266,9 @@ namespace webapi.Controllers
 				dbDrink.Description = updateDrinkRequest.Description;
 				dbDrink.IsActive = updateDrinkRequest.IsActive;
 				dbDrink.DrinkIngredients = _dbContext.DrinkIngredients.Where(x => x.DrinkId == id).ToList();
+				dbDrink.DrinkTypes = _dbContext.DrinkTypes.Where(x => x.DrinkId == id).ToList();
 
+				/* Ingredients */
 				// Iterate through the drink ingredient list of DB
 				foreach (var i in dbDrink.DrinkIngredients)
 				{
@@ -299,7 +301,34 @@ namespace webapi.Controllers
 						await _dbContext.DrinkIngredients.AddAsync(newIngredient);
 					}
 				}
-				
+
+				/* Types */
+				// Iterate through the drink type list of DB
+				foreach (var i in dbDrink.DrinkTypes)
+				{
+					// If the updateDrinkRequest doesn't have the type that is in DB (meaning the ingredient has been removed by user)
+					if (!updateDrinkRequest.Types.Any(x => x.Id == i.TypeId))
+					{
+						// The type needs to be removed from DB
+						_dbContext.DrinkTypes.Remove(i);
+					}
+				}
+				// Interate through the drink type list provided by front-end
+				foreach (var i in updateDrinkRequest.Types)
+				{
+					// If DB doesn't have the type that is in updateDrinkRequest (meaning the type is newly added)
+					if (!dbDrink.DrinkTypes.Any(x => x.TypeId == i.Id))
+					{
+						// The ingredient needs to be added to DB
+						var newType = new DrinkType
+						{
+							DrinkId = id,
+							TypeId = i.Id
+						};
+						await _dbContext.DrinkTypes.AddAsync(newType);
+					}
+				}
+
 				_dbContext.Update(dbDrink);
 				await _dbContext.SaveChangesAsync();
 

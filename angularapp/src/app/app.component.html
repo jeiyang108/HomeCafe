@@ -15,10 +15,17 @@
             <a class="nav-link active" routerLink="ingredients">Ingredients</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control form-control-search me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-secondary" type="submit">Search</button>
-        </form>
+
+        <div class="px-4 d-flex">
+          <div class="row">
+            <button type="button" class="col mx-1 btn btn-sm btn-secondary">
+              <mat-icon aria-hidden="false" fontIcon="shopping_cart" class="align-middle cart-icon"></mat-icon>
+            </button>
+            <button type="button" class="col mx-1 btn btn-sm btn-secondary">
+              <mat-icon aria-hidden="false" fontIcon="person" class="align-middle login-icon"></mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

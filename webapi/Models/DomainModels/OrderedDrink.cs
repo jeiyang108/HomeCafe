@@ -7,5 +7,10 @@
         public Drink Drink { get; set; }
         public Status Status { get; set; }
         public int Sequence { get; set; }
-    }
+
+		public static implicit operator OrderedDrink(OrderedDrink v)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

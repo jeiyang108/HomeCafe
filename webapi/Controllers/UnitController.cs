@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Extensions;
+using webapi.Data;
 using webapi.Helpers;
 using webapi.Models.DomainModels;
 
@@ -10,22 +11,18 @@ namespace webapi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class UnitsController : ControllerBase
+	public class UnitController : ControllerBase
 	{
-		public UnitsController()
+		private readonly CafeDbContext _dbContext;
+		public UnitController(CafeDbContext dbContext)
 		{
+			_dbContext = dbContext;
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> GetAllUnits()
 		{
-			var units = new List<Unit>();
-			foreach (var item in Enum.GetValues<UnitEnum>())
-			{
-				units.Add(
-					new Unit { Id = (int)item, Name = item.GetDisplayName() }
-				);
-			}
+			var units = await _dbContext.Units.ToListAsync();
 			return Ok(units);
 		}
 	}

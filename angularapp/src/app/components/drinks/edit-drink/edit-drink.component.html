@@ -44,7 +44,6 @@
             <li *ngFor="let type of types" class="list-group-item list-group-item-custom list-group-item-action"
               (click)="updateType(type)" [ngClass]="{ 'active' : hasType(type) }">
               {{type.name}}
-
             </li>
           </ul>
         </div>
@@ -63,11 +62,17 @@
             <thead>
             </thead>
             <tbody>
-            <tr *ngFor="let ingredient of updateDrinkRequest.drinkIngredients" >
-              <td>{{ingredient.name}}</td>
-              <td><input type="text" [value]="ingredient.amount" (input)="setAmount(ingredient, $event)" class="form-control px-1"></td>
-              <td>{{ingredient.unit.name }}</td>
-              <td><span class="btn btn-danger btn-sm" type="button" (click)="removeIngredient(ingredient)">Remove</span></td>
+            <tr *ngFor="let ingredient of updateDrinkRequest.drinkIngredients">
+              <td class="col-5">
+                <div [ngClass]="{ 'unavailable' : (ingredient.status != 'Active') }"> {{ingredient.name}} </div>
+                <i *ngIf="ingredient.status != 'Active'" class="unavailable-alert">
+                  Currently Unavailable
+                  <mat-icon aria-hidden="false" fontIcon="info" class="tooltip-icon" matTooltip="Drink can be created but cannot be ordered."></mat-icon>
+                </i>
+              </td>
+              <td class="col-3"><input type="text" [value]="ingredient.amount" (input)="setAmount(ingredient, $event)" class="form-control px-1"></td>
+              <td class="col-2">{{ingredient.unit.name }}</td>
+              <td class="col-2"><span class="btn btn-danger btn-sm" type="button" (click)="removeIngredient(ingredient)">Remove</span></td>
             </tr>
            </tbody>
           </table>

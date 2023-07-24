@@ -13,7 +13,11 @@ import { IngredientService } from 'src/app/services/ingredient.service';
   styleUrls: ['./add-drink.component.css']
 })
 export class AddDrinkComponent implements OnInit {
-  selectedIngredient!: DrinkIngredient;
+  selectedIngredient: DrinkIngredient = {
+    name: '',
+    ingredientId: 0,
+    unit: {id: 0, name: ''}
+  };
   addDrinkRequest: Drink = {
     id: 0,
     name: '',

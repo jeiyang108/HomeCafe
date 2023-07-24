@@ -11,26 +11,26 @@ import { Unit } from '../models/unit.model';
 })
 export class IngredientService {
   updateIngredient(ingredient: DrinkIngredient) {
-    return this.http.put<DrinkIngredient>(this.baseApiUrl + '/api/ingredients', ingredient);
+    return this.http.put<DrinkIngredient>(this.baseApiUrl + '/api/ingredient', ingredient);
   }
 
   updateIngredientStatus(id: number, action: string) {
-    return this.http.put<DrinkIngredient>(this.baseApiUrl + '/api/ingredients/' + id, action);
+    return this.http.put<DrinkIngredient>(this.baseApiUrl + '/api/ingredient/' + id, action);
   }
 
   baseApiUrl: string = environment.baseApiUrl;
   constructor(private http: HttpClient) { }
 
   getIngredients(): Observable<DrinkIngredient[]> {
-    return this.http.get<DrinkIngredient[]>(this.baseApiUrl + '/api/ingredients');
+    return this.http.get<DrinkIngredient[]>(this.baseApiUrl + '/api/ingredient');
   }
 
   deleteIngredient(id: string): Observable<DrinkIngredient> {
-    return this.http.delete<DrinkIngredient>(this.baseApiUrl + '/api/ingredients/' + id);
+    return this.http.delete<DrinkIngredient>(this.baseApiUrl + '/api/ingredient/' + id);
   }
 
   getUnits(): Observable<Unit[]> {
-    return this.http.get<Unit[]>(this.baseApiUrl + '/api/units');
+    return this.http.get<Unit[]>(this.baseApiUrl + '/api/unit');
   }
 
   /*

@@ -10,7 +10,7 @@ namespace webapi.Models.DTOs
 		public string Name { get; set; }
 		public string? Status { get; set; } // 1: ACTIVE 2:INACTIVE 3:DELETED 
 		public int? Amount { get; set; }
-		public UnitDTO? Unit { get; set; }
+		public UnitDTO Unit { get; set; }
 
 	}
 }

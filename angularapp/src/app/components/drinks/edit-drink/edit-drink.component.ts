@@ -16,7 +16,11 @@ import { DrinkIngredient } from '../../../models/drink-ingredient.model';
   providers: [DatePipe]
 })
 export class EditDrinkComponent implements OnInit {
-  selectedIngredient!: DrinkIngredient;
+  selectedIngredient: DrinkIngredient = {
+    name: '',
+    ingredientId: 0,
+    unit: {id: 0, name: ''}
+  };
   updateDrinkRequest: Drink = {
     id: 0,
     name: '',
