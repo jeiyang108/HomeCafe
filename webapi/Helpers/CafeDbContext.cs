@@ -12,7 +12,8 @@ namespace webapi.Data
 
         public DbSet<Drink> Drinks { get; set; }
         public DbSet<OrderedDrinkIngredient> OrderedDrinkIngredients { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set; }
+		public DbSet<OrderedDrink> OrderedDrinks { get; set; }
+		public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DrinkType> DrinkTypes { get; set; }
         public DbSet<DrinkIngredient> DrinkIngredients { get; set; }
         public DbSet<Unit> Units { get; set; }
@@ -59,10 +60,13 @@ namespace webapi.Data
             );
 
             modelBuilder.Entity<Status>().HasData(
-                new Status { Id = 1, Name = "New Order" },
+                new Status { Id = 1, Name = "New Order" }, // Order
                 new Status { Id = 2, Name = "In Progress" },
                 new Status { Id = 3, Name = "Completed" },
-                new Status { Id = 4, Name = "Cancelled" }
+                new Status { Id = 4, Name = "Cancelled" },
+                new Status { Id = 5, Name = "Active"}, // Ingredient
+                new Status { Id = 6, Name = "Inactive"},
+                new Status { Id = 7, Name = "Deleted"}
             );
 
             byte[] imageData = File.ReadAllBytes("Images/CoffeeImage.jpg");
@@ -72,17 +76,17 @@ namespace webapi.Data
                 samplePhoto1, samplePhoto2
 			);
 
-            var vanilla = new Ingredient { Id = 1, Name = "Sugar-free vanilla", UnitId = pump.Id };
-            var hazelnut = new Ingredient { Id = 2, Name = "Sugar-free hazelnut", UnitId = pump.Id };
-            var cocoa = new Ingredient { Id = 3, Name = "Chocolate (Cocoa powder)", UnitId = tsp.Id };
-            var sugar = new Ingredient { Id = 4, Name = "Sugar (white)", UnitId = tsp.Id };
-            var cinnamon = new Ingredient { Id = 5, Name = "Cinnamon powder", UnitId = tsp.Id };
-            var milk2 = new Ingredient { Id = 6, Name = "2% milk", UnitId = baseIng.Id };
-            var milk3 = new Ingredient { Id = 7, Name = "3% milk", UnitId = baseIng.Id };
-            var ice = new Ingredient { Id = 8, Name = "Ice", UnitId = other.Id };
-            var espresso = new Ingredient { Id = 9, Name = "Espresso shot", UnitId = shot.Id };
-            var hotWater = new Ingredient { Id = 10, Name = "Hot water", UnitId = baseIng.Id };
-            var water = new Ingredient { Id = 11, Name = "Water", UnitId = baseIng.Id };
+            var vanilla = new Ingredient { Id = 1, Name = "Sugar-free vanilla", UnitId = pump.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var hazelnut = new Ingredient { Id = 2, Name = "Sugar-free hazelnut", UnitId = pump.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var cocoa = new Ingredient { Id = 3, Name = "Chocolate (Cocoa powder)", UnitId = tsp.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var sugar = new Ingredient { Id = 4, Name = "Sugar (white)", UnitId = tsp.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var cinnamon = new Ingredient { Id = 5, Name = "Cinnamon powder", UnitId = tsp.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var milk2 = new Ingredient { Id = 6, Name = "2% milk", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var milk3 = new Ingredient { Id = 7, Name = "3% milk", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var ice = new Ingredient { Id = 8, Name = "Ice", UnitId = other.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var espresso = new Ingredient { Id = 9, Name = "Espresso shot", UnitId = shot.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var hotWater = new Ingredient { Id = 10, Name = "Hot water", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
+            var water = new Ingredient { Id = 11, Name = "Water", UnitId = baseIng.Id, StatusId = (int)Helpers.StatusEnum.Active };
             modelBuilder.Entity<Ingredient>().HasData(
                vanilla, hazelnut, cocoa, sugar, cinnamon, milk2, milk3, ice, espresso, hotWater, water
             );

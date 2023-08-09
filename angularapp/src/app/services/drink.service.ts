@@ -13,27 +13,27 @@ export class DrinkService {
   constructor(private http: HttpClient) { }
 
   getAllDrinks(): Observable<Drink[]> {
-    return this.http.get<Drink[]>(this.baseApiUrl + '/api/drinks');
+    return this.http.get<Drink[]>(this.baseApiUrl + '/api/drink');
   }
 
-  addDrink(addDrinkRequest: Drink): Observable<Drink> {
-    return this.http.post<Drink>(this.baseApiUrl + '/api/drinks', addDrinkRequest);
+  addDrink(formData: FormData): Observable<Drink> {
+    return this.http.post<Drink>(this.baseApiUrl + '/api/drink', formData);
   }
 
   getDrink(id: string): Observable<Drink> {
-    return this.http.get<Drink>(this.baseApiUrl + '/api/drinks/' + id);
+    return this.http.get<Drink>(this.baseApiUrl + '/api/drink/' + id);
   }
 
   updateDrink(id: string, updateDrinkRequest: Drink): Observable<Drink> {
-    return this.http.put<Drink>(this.baseApiUrl + '/api/drinks/' + id, updateDrinkRequest);
+    return this.http.put<Drink>(this.baseApiUrl + '/api/drink/' + id, updateDrinkRequest);
   }
 
   updateDrinkPhoto(id: string, formData: FormData): Observable<Drink> {
-    return this.http.put<Drink>(this.baseApiUrl + '/api/drinks/photo/' + id, formData);
+    return this.http.put<Drink>(this.baseApiUrl + '/api/drink/photo/' + id, formData);
   }
 
   deleteDrink(id: string): Observable<Drink> {
-    return this.http.delete<Drink>(this.baseApiUrl + '/api/drinks/' + id);
+    return this.http.delete<Drink>(this.baseApiUrl + '/api/drink/' + id);
   }
 
 

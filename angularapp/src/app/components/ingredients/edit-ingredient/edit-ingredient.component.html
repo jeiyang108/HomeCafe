@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{ingredient.name}}</h2>
+<mat-dialog-content [id]="'flush-collapse' + ingredient.ingredientId">
+  <form #form="ngForm" class="accordion-body" (ngSubmit)="updateIngredient()">
+    <mat-form-field class="col-12 col-sm-6 px-1">
+      <mat-label>ID</mat-label>
+      <input matInput  [(ngModel)]="ingredient.ingredientId" name="ingredientid" readonly>
+    </mat-form-field>
+    <mat-form-field class="col-12 col-sm-6 px-1">
+      <mat-label>Ingredient Name</mat-label>
+      <input matInput placeholder="Ex. Green tea" [(ngModel)]="ingredient.name" name="name">
+    </mat-form-field>
+    <mat-form-field class="col-12 col-sm-6 px-1">
+      <mat-label>Unit</mat-label>
+      <mat-select [(ngModel)]="ingredient.unit" [compareWith]="isCurrentUnitValue" name="unit">
+        <mat-option *ngFor="let unit of unitOptions" [value]="unit">
+          {{unit.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-slide-toggle class="col-12 col-sm-6 px-1" type="checkbox" role="switch" id="isActive" name="isActive" [(ngModel)]="ingredient.isActive">
+      Available
+    </mat-slide-toggle>
+
+    <div class="my-3 btn-group">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" id="deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" class="btn btn-danger mx-1">Delete</button>
+    </div>
+  </form>
+</mat-dialog-content>
+
+
+<!--Delete Confirmation Popup-->
+<div class="modal" id="deleteConfirmModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete '{{ingredient.name}}'?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="deleteConfirmed" class="btn btn-danger" (click)="deleteIngredient()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

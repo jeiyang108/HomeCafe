@@ -6,31 +6,30 @@
     <form #form="ngForm" class="row" (ngSubmit)="updateDrink()">
       <div class="col-sm-6">
         <div class="mb-3">
-          <label for="id" class="form-label">ID</label>
+          <label for="id" class="h6 form-label">ID</label>
           <input type="text" class="form-control" id="id" name="id" [(ngModel)]="updateDrinkRequest.id" disabled readonly>
         </div>
         <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
+          <label for="name" class="h6 form-label">Name</label>
           <input type="text" class="form-control" id="name" name="name" [(ngModel)]="updateDrinkRequest.name">
         </div>
         <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
+          <label for="description" class="h6 form-label">Description</label>
           <textarea class="form-control" id="description" name="description" [(ngModel)]="updateDrinkRequest.description"></textarea>
         </div>
         <div class="mb-3">
-          <label for="dateCreated" class="form-label">Date Created</label>
+          <label for="dateCreated" class="h6 form-label">Date Created</label>
           <input type="text" class="form-control" id="dateCreated" name="dateCreated" date="dd-MM-yyyy" [(ngModel)]="updateDrinkRequest.formattedDateCreated" disabled readonly>
         </div>
-        <div class="mb-3 form-check form-switch">
-          <label for="isActive" class="form-label">Active</label>
-          <input class="form-control form-check-input active-switch" type="checkbox" role="switch" id="isActive" name="isActive" [(ngModel)]="updateDrinkRequest.isActive">
+        <div class="mb-3">
+          <mat-slide-toggle type="checkbox" role="switch" id="isActive" name="isActive" [(ngModel)]="updateDrinkRequest.isActive">Active</mat-slide-toggle>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="mb-3">
-          <label for="type" class="form-label">Current Image</label>
+          <label for="type" class="h6 form-label">Current Image</label>
           <img [src]="updateDrinkRequest.image" alt="Image" class="form-label row mx-auto"/>
-          <label for="type" class="form-label">Image Update</label>
+          <label for="type" class="h6 form-label">Image Update</label>
           <div class="input-group">
             <input type="file" accept="image/jpeg, image/png, image/gif" class="form-control" id="imageFile" aria-label="Upload" (change)="onChangeFile($event)">
             <button class="btn btn-outline-success" type="button" id="imageUpdateBtn" (click)="confirmImageUpdate()">Update</button>
@@ -39,17 +38,49 @@
       </div>
 
       <div class="col-sm-12">
-        <div class="mb-3">
-          <label for="types" class="form-label">Drink Types</label>
+        <div class="my-3">
+          <label for="types" class="h6 form-label">Drink Types</label>
           <ul class="list-group list-group-horizontal">
             <li *ngFor="let type of types" class="list-group-item list-group-item-custom list-group-item-action"
               (click)="updateType(type)" [ngClass]="{ 'active' : hasType(type) }">
               {{type.name}}
-
             </li>
           </ul>
         </div>
-        <div class="mb-3 btn-group">
+        <div class="my-5">
+          <label for="ingredients" class="h6 form-label">Drink Ingredients</label>
+          <div class="input-group">
+            <input class="form-control" list="ingredientDataList" id="ingredientListInput" [(ngModel)]="selectedIngredient.name" name="ingredientName" placeholder="Type to search...">
+            <datalist id="ingredientDataList" name="selectedIngredient">
+              <option *ngFor="let item of ingredientList" [ngValue]="item.name" class="datalist-options">{{item.name}}</option>
+            </datalist>
+            <button class="btn btn-outline-secondary" type="button" (click)="addSelectedIngredient(selectedIngredient)">Add</button>
+          </div>
+        </div>
+        <div class="mb-2">
+          <table class="table table-light">
+            <thead>
+            </thead>
+            <tbody>
+            <tr *ngFor="let ingredient of updateDrinkRequest.drinkIngredients">
+              <td class="col-5">
+                <div [ngClass]="{ 'unavailable' : (ingredient.status != 'Active') }"> {{ingredient.name}} </div>
+                <i *ngIf="ingredient.status != 'Active'" class="unavailable-alert">
+                  Currently Unavailable
+                  <mat-icon aria-hidden="false" fontIcon="info" class="tooltip-icon" matTooltip="Drink can be created but cannot be ordered."></mat-icon>
+                </i>
+              </td>
+              <td class="col-3"><input type="text" [value]="ingredient.amount" (input)="setAmount(ingredient, $event)" class="form-control px-1"></td>
+              <td class="col-2">{{ingredient.unit.name }}</td>
+              <td class="col-2"><span class="btn btn-danger btn-sm" type="button" (click)="removeIngredient(ingredient)">Remove</span></td>
+            </tr>
+           </tbody>
+          </table>
+        </div>
+
+
+        <!-- Button Group -->
+        <div class="my-3 btn-group">
           <button type="submit" class="btn btn-primary">Save</button>
           <button type="button" id="deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" class="btn btn-danger mx-1">Delete</button>
           <button type="button" routerLink="/drinks" class="btn btn-secondary">Back</button>

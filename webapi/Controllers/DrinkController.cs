@@ -1,24 +1,28 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
+using Newtonsoft.Json;
 using System.Drawing;
 using System.Net.Http.Headers;
 using webapi.Data;
+using webapi.Helpers;
 using webapi.Models.DomainModels;
 using webapi.Models.DTOs;
 using static System.Net.Mime.MediaTypeNames;
 using Image = SixLabors.ImageSharp.Image;
+using Type = webapi.Models.DomainModels.Type;
 
 namespace webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DrinksController : ControllerBase
+    public class DrinkController : ControllerBase
     {
 
         private readonly CafeDbContext _dbContext;
 
-        public DrinksController(CafeDbContext dbContext)
+        public DrinkController(CafeDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -27,9 +31,18 @@ namespace webapi.Controllers
         // Create a new drink
         [HttpPost]
 		[DisableRequestSizeLimit]
-		public async Task<IActionResult> AddDrink([FromBody] UpdateDrinkRequest addDrinkRequest)
+		public async Task<IActionResult> AddDrink()
         {
-			var file = Request.Form.Files[0];
+			var formCollection = await Request.ReadFormAsync();
+
+			var file = formCollection.Files.GetFile("file");
+
+			// Access other form data values
+			var addDrinkRequestJson = formCollection["addDrinkRequest"];
+
+			// Deserialize the JSON to your model
+			var addDrinkRequest = JsonConvert.DeserializeObject<UpdateDrinkRequest>(addDrinkRequestJson);
+
 			if (file.Length > 0)
 			{
 				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", "TEMP_" + file.FileName);
@@ -65,10 +78,35 @@ namespace webapi.Controllers
 						PhotoId = photo.Id
 					};
 
-					await _dbContext.Drinks.AddAsync(drink);
+					await _dbContext.Drinks.AddAsync(drink); // Drink object is being tracked by the context 
 					await _dbContext.SaveChangesAsync();
 
-					return Ok(drink);
+					var drinkTypes = new List<DrinkType>();
+					foreach (var type in addDrinkRequest.Types)
+					{
+						drinkTypes.Add(new DrinkType
+						{
+							DrinkId = drink.Id,
+							TypeId = type.Id
+						});
+					}
+					drink.DrinkTypes = drinkTypes;
+					
+					var drinkIngredients = new List<DrinkIngredient>();
+					foreach (var ingredient in addDrinkRequest.DrinkIngredients)
+					{
+						drinkIngredients.Add(new DrinkIngredient
+						{
+							DrinkId = drink.Id,
+							IngredientId = ingredient.IngredientId,
+							Amount = ingredient.Amount ?? 0
+						});
+					}
+					drink.DrinkIngredients = drinkIngredients;
+
+					await _dbContext.SaveChangesAsync();
+
+					return Ok();
 				}
 				catch (Exception ex)
 				{
@@ -138,9 +176,10 @@ namespace webapi.Controllers
 									select (new DrinkIngredientDTO
 									{
 										IngredientId = ingredient.Id,
-										IngredientName = ingredient.Name,
+										Name = ingredient.Name,
 										Amount = drinkIngredient.Amount,
-										UnitName = unit.Name
+										Unit = new UnitDTO { Id = unit.Id, Name = unit.Name },
+										Status = ((StatusEnum)ingredient.StatusId).GetDisplayName()
 									})).ToListAsync();
 
 			var drinkFound = await (from drink in _dbContext.Drinks
@@ -218,7 +257,7 @@ namespace webapi.Controllers
 		[Route("{id:int}")]
 		public async Task<IActionResult> UpdateDrink([FromRoute] int id, [FromBody] UpdateDrinkRequest updateDrinkRequest)
 		{
-			// Get domain object
+			// Get domain object from DB
 			var dbDrink = await _dbContext.Drinks.FindAsync(id);
 
 			if (dbDrink != null)
@@ -226,19 +265,29 @@ namespace webapi.Controllers
 				dbDrink.Name = updateDrinkRequest.Name;
 				dbDrink.Description = updateDrinkRequest.Description;
 				dbDrink.IsActive = updateDrinkRequest.IsActive;
+				dbDrink.DrinkIngredients = _dbContext.DrinkIngredients.Where(x => x.DrinkId == id).ToList();
+				dbDrink.DrinkTypes = _dbContext.DrinkTypes.Where(x => x.DrinkId == id).ToList();
 
+				/* Ingredients */
+				// Iterate through the drink ingredient list of DB
 				foreach (var i in dbDrink.DrinkIngredients)
 				{
-					// If the updateDrinkRequest doesn't have the ingredient DB has
+					// If the updateDrinkRequest doesn't have the ingredient that is in DB (meaning the ingredient has been removed by user)
 					if (!updateDrinkRequest.DrinkIngredients.Any(x => x.IngredientId == i.IngredientId))
 					{
 						// The ingredient needs to be removed from DB
 						_dbContext.DrinkIngredients.Remove(i);
 					}
+					else
+					{
+						// The ingredient exists in DB. Update the Amount value.
+						i.Amount = updateDrinkRequest.DrinkIngredients.First(x => x.IngredientId == i.IngredientId).Amount ?? 0;
+					}
 				}
+				// Interate through the drink ingredient list provided by front-end
 				foreach(var i in updateDrinkRequest.DrinkIngredients)
 				{
-					// If DB doesn't have the ingredient updateDrinkRequest has
+					// If DB doesn't have the ingredient that is in updateDrinkRequest (meaning the ingredient is newly added)
 					if (!dbDrink.DrinkIngredients.Any(x => x.IngredientId == i.IngredientId))
 					{
 						// The ingredient needs to be added to DB
@@ -247,16 +296,43 @@ namespace webapi.Controllers
 							DrinkId = id,
 							Drink = dbDrink,
 							IngredientId = i.IngredientId,
-							Amount = i.Amount
+							Amount = i.Amount ?? 0
 						};
 						await _dbContext.DrinkIngredients.AddAsync(newIngredient);
 					}
 				}
-				
+
+				/* Types */
+				// Iterate through the drink type list of DB
+				foreach (var i in dbDrink.DrinkTypes)
+				{
+					// If the updateDrinkRequest doesn't have the type that is in DB (meaning the ingredient has been removed by user)
+					if (!updateDrinkRequest.Types.Any(x => x.Id == i.TypeId))
+					{
+						// The type needs to be removed from DB
+						_dbContext.DrinkTypes.Remove(i);
+					}
+				}
+				// Interate through the drink type list provided by front-end
+				foreach (var i in updateDrinkRequest.Types)
+				{
+					// If DB doesn't have the type that is in updateDrinkRequest (meaning the type is newly added)
+					if (!dbDrink.DrinkTypes.Any(x => x.TypeId == i.Id))
+					{
+						// The ingredient needs to be added to DB
+						var newType = new DrinkType
+						{
+							DrinkId = id,
+							TypeId = i.Id
+						};
+						await _dbContext.DrinkTypes.AddAsync(newType);
+					}
+				}
+
 				_dbContext.Update(dbDrink);
 				await _dbContext.SaveChangesAsync();
 
-				return Ok(dbDrink);
+				return Ok();
 			}
 			return NotFound();
 		}

@@ -1,26 +1,80 @@
 <div class="py-4 bg-body-tertiary">
   <div class="container my-3">
-    <h1 class="mb-3">Add a New Drink</h1>
-    <div class="row">
-      <div class="col-6">
-        <form #form="ngForm" (ngSubmit)="addDrink()">
-          <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="addDrinkRequest.name">
-          </div>
-          <div class="mb-3">
-            <label for="type" class="form-label">Type</label>
-            <input type="text" class="form-control" id="type" name="type" >
-          </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control" id="description" name="description" [(ngModel)]="addDrinkRequest.description">
-          </div>
-
-          <button type="submit" class="btn btn-primary mx-1">Save</button>
-          <button type="button" routerLink="/drinks" class="btn btn-secondary mx-1">Back</button>
-        </form>
-      </div>
+    <div>
+      <h1 class="mb-3">Add a New Drink</h1>
     </div>
+    <form #form="ngForm" class="row" (ngSubmit)="addDrink()">
+      <div class="col-sm-6">
+        <div class="mb-3">
+          <label for="name" class="h6 form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" [(ngModel)]="addDrinkRequest.name">
+        </div>
+        <div class="mb-3">
+          <label for="description" class="h6 form-label">Description</label>
+          <textarea class="form-control" id="description" name="description" [(ngModel)]="addDrinkRequest.description"></textarea>
+        </div>
+        <div class="mb-3 form-check form-switch">
+          <label for="isActive" class="h6 form-label">Active</label>
+          <input class="form-control form-check-input active-switch" type="checkbox" role="switch" id="isActive" name="isActive" [(ngModel)]="addDrinkRequest.isActive">
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="mb-3">
+          <label for="type" class="h6 form-label">Add Image</label>
+          <img id="imgDisplay" [src]="addDrinkRequest.image" *ngIf="addDrinkRequest.image.length > 0" alt="Image" class="form-label row mx-auto img-fluid rounded"/>
+          <br>
+          <div class="input-group">
+            <input type="file" accept="image/jpeg, image/png, image/gif" class="form-control" id="imageFile" aria-label="Upload" (change)="onChangeFile($event)">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="my-3">
+          <label for="types" class="h6 form-label">Drink Types</label>
+          <ul class="list-group list-group-horizontal">
+            <li *ngFor="let type of types" class="list-group-item list-group-item-custom list-group-item-action"
+              (click)="updateType(type)" [ngClass]="{ 'active' : hasType(type) }">
+              {{type.name}}
+
+            </li>
+          </ul>
+        </div>
+        <div class="my-5">
+          <label for="ingredients" class="h6 form-label">Drink Ingredients</label>
+          <div class="input-group">
+
+            <input class="form-control" list="ingredientDataList" id="ingredientListInput" [(ngModel)]="selectedIngredient.name" name="ingredientName" placeholder="Type to search...">
+            <datalist id="ingredientDataList" name="selectedIngredient">
+              <option *ngFor="let item of ingredientList" [ngValue]="item.name" class="datalist-options">{{item.name}}</option>
+            </datalist>
+            <button class="btn btn-outline-secondary" type="button" (click)="addSelectedIngredient(selectedIngredient)">Add</button>
+          </div>
+        </div>
+        <div class="mb-2">
+          <table class="table table-light">
+            <thead>
+            </thead>
+            <tbody>
+            <tr *ngFor="let ingredient of addDrinkRequest.drinkIngredients" >
+              <td>{{ingredient.name}}</td>
+              <td><input type="text" [value]="ingredient.amount" (input)="setAmount(ingredient, $event)" class="form-control px-1"></td>
+              <td>{{ingredient.unit }}</td>
+              <td><span class="btn btn-danger btn-sm" type="button" (click)="removeIngredient(ingredient)">Remove</span></td>
+            </tr>
+           </tbody>
+          </table>
+        </div>
+
+
+        <!-- Button Group -->
+        <div class="my-3 btn-group">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" id="deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" class="btn btn-danger mx-1">Delete</button>
+          <button type="button" routerLink="/drinks" class="btn btn-secondary">Back</button>
+        </div>
+      </div>
+    </form>
+
   </div>
 </div>

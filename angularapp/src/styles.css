@@ -79,3 +79,35 @@
 a {
   color:rgb(72, 128, 66);
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+#isActive label {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+    line-height: 1.2;
+    color: var(--bs-heading-color);
+}
+
+.unavailable {
+  color: red !important;
+  text-decoration: line-through;
+}
+
+.unavailable-alert {
+  color:rgb(103 108 104);
+  text-decoration: none !important;
+  font-size: smaller;
+  padding-top: 0px;
+}
+
+.mat-icon.tooltip-icon {
+  height: 16px;
+  width: 16px;
+  font-size: 16px;
+  vertical-align: text-bottom;
+}

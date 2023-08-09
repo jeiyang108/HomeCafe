@@ -6,11 +6,11 @@ namespace webapi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class TypesController : Controller
+	public class TypeController : Controller
 	{
 		private readonly CafeDbContext _dbContext;
 
-		public TypesController(CafeDbContext dbContext)
+		public TypeController(CafeDbContext dbContext)
 		{
 			_dbContext = dbContext;
 		}

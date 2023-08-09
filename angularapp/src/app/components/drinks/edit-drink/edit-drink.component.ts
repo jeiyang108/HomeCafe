@@ -1,3 +1,5 @@
+
+import { IngredientService } from './../../../services/ingredient.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DrinkService } from '../../../services/drink.service';
@@ -5,7 +7,7 @@ import { TypeService } from './../../../services/type.service';
 import { Drink } from '../../../models/drink.model';
 import { Type } from '../../../models/type.model';
 import { DatePipe } from '@angular/common';
-
+import { DrinkIngredient } from '../../../models/drink-ingredient.model';
 
 @Component({
   selector: 'app-edit-drink',
@@ -14,7 +16,11 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class EditDrinkComponent implements OnInit {
-
+  selectedIngredient: DrinkIngredient = {
+    name: '',
+    ingredientId: 0,
+    unit: {id: 0, name: ''}
+  };
   updateDrinkRequest: Drink = {
     id: 0,
     name: '',
@@ -23,16 +29,17 @@ export class EditDrinkComponent implements OnInit {
     formattedDateCreated: '',
     isActive: true,
     image: '',
-    imageNew: '',
     types: [],
     drinkIngredients: []
   };
   types: Array<Type> = [];
+  ingredientList: Array<DrinkIngredient> = [];
   file?: Blob;
 
 
   constructor(private route: ActivatedRoute, private drinkService: DrinkService,
-    private typeService: TypeService, private router: Router, private datePipe: DatePipe) { }
+    private typeService: TypeService, private ingredientService: IngredientService,
+    private router: Router, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     // To grab id of the current drink record
@@ -41,20 +48,31 @@ export class EditDrinkComponent implements OnInit {
         const id = params.get('id');
 
         if (id) {
-          //call api
+          // Get details of the drink
           this.drinkService.getDrink(id)
             .subscribe({
               next: (response) => {
                 this.updateDrinkRequest = response;
+                // Date format
                 this.updateDrinkRequest.formattedDateCreated = this.datePipe.transform(response.dateCreated, 'MMMM d, y h:mm a') ?? 'Undefined';
+                // Image format
                 this.updateDrinkRequest.image = 'data:image/png;base64,' + response.image;
               }
           });
 
+          // Get all available drink types
           this.typeService.getTypes()
             .subscribe({
               next: (response) => {
                 this.types = response;
+              }
+          });
+          // Get all available ingredients
+          this.ingredientService.getIngredients()
+            .subscribe({
+              next: (response) => {
+                this.ingredientList = response;
+                //this.ingredientList.forEach(i => i.unitName = this.ingredientService.getUnitViewValue(i.unit ?? Unit.Undefined));
               }
           });
         }
@@ -63,6 +81,7 @@ export class EditDrinkComponent implements OnInit {
     });
   }
 
+  // Update the drink record when the form is submitted
   updateDrink() {
     this.drinkService.updateDrink(this.updateDrinkRequest.id.toString(), this.updateDrinkRequest)
       .subscribe({
@@ -72,7 +91,7 @@ export class EditDrinkComponent implements OnInit {
       });
   }
 
-
+  // Delete the drink record
   deleteDrink() {
     // Delete the drink, close the modal and redirect to the drink list page.
     this.drinkService.deleteDrink(this.updateDrinkRequest.id.toString())
@@ -93,21 +112,20 @@ export class EditDrinkComponent implements OnInit {
       } else {
         const formData = new FormData();
         formData.append('file', this.file);
-        this.drinkService.updateDrinkPhoto(this.updateDrinkRequest.id.toString(), formData) //this.updateDrinkRequest.imageNew)
+        this.drinkService.updateDrinkPhoto(this.updateDrinkRequest.id.toString(), formData)
         .subscribe({
           next: (response) => {
             this.router.navigate(['drinks']);
           }
         });
       }
-
     }
   }
 
   onChangeFile(event: any) {
+    // When image file is selected, load the file so it can be ready for confirmImageUpdate()
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
-
     }
   }
 
@@ -116,14 +134,34 @@ export class EditDrinkComponent implements OnInit {
     return this.updateDrinkRequest.types?.findIndex(e => e.name == object.name) != -1;
   }
 
-  updateType(object: Type) {
-    let index = this.updateDrinkRequest.types?.findIndex(e => e.name == object.name);
+  updateType(item: Type) {
+    let index = this.updateDrinkRequest.types?.findIndex(e => e.name == item.name);
     // if the updated type was already associated to the drink, remove the type. Otherwise, add the new type to the drink.
     if (index != -1) {
-      this.updateDrinkRequest.types = this.updateDrinkRequest.types?.filter(e => e.name !== object.name);
+      this.updateDrinkRequest.types = this.updateDrinkRequest.types?.filter(e => e.name !== item.name);
     } else {
-      this.updateDrinkRequest.types?.push(object);
+      this.updateDrinkRequest.types?.push(item);
     }
+  }
+
+  // Add the selected ingredient to the ingredient list at the bottom
+  addSelectedIngredient(ingredient: DrinkIngredient) {
+    let ingredientRef = this.ingredientList.find(i => i.name == ingredient.name);
+    if (ingredientRef != undefined)
+    {
+      this.updateDrinkRequest.drinkIngredients?.push(ingredientRef);
+      this.selectedIngredient.name = '';
+    }
+  }
+
+  // Remove the ingredient from the list
+  removeIngredient(ingredient: DrinkIngredient) {
+    this.updateDrinkRequest.drinkIngredients = this.updateDrinkRequest.drinkIngredients?.filter(i => i.name !== ingredient.name);
+  }
+
+  // Set the amount to given value when the input field is updated
+  setAmount(ingredient: DrinkIngredient, event: any) {
+    ingredient.amount = parseInt(event.target.value);
   }
 }
 
